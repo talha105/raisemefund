@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "842649647910",
+    "project_id": "raisemefund-b8de7",
+    "storage_bucket": "raisemefund-b8de7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842649647910:android:aa5cc5f055a912c1de5fe7",
+        "android_client_info": {
+          "package_name": "com.raisemefund"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842649647910-05l9kem76kgj345bjl5l9d45h7ap52f7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBP7iqlxBp8fVWhNbqzpw9x8zakKx7t7RM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842649647910-05l9kem76kgj345bjl5l9d45h7ap52f7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
