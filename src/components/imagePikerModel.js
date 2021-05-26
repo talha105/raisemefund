@@ -17,9 +17,9 @@ function ImagePickerModal({visible,closeModle,goToCamera,goToGallery}){
                     <View style={{flex:1,flexDirection:'row',justifyContent:'space-around',width:'100%',alignItems:'center'}}>
                         <TouchableOpacity 
                         onPress={()=>goToCamera()}
-                        style={{marginLeft:20,width:95,height:95,borderRadius:7,borderColor:'#f9a533',borderWidth:3,justifyContent:'center',alignItems:'center'}}>
+                        style={{marginLeft:20,width:80,height:80,borderRadius:7,borderColor:'#f9a533',borderWidth:3,justifyContent:'center',alignItems:'center'}}>
                         <CameraIcon
-                        size={60}
+                        size={50}
                         color="#f9a533"
                         name="camerao"
                         
@@ -27,9 +27,9 @@ function ImagePickerModal({visible,closeModle,goToCamera,goToGallery}){
                         </TouchableOpacity>
                         <TouchableOpacity 
                         onPress={()=>goToGallery()}
-                        style={{marginRight:20,width:95,height:95,borderRadius:7,borderColor:'#f9a533',borderWidth:3,justifyContent:'center',alignItems:'center'}}>
+                        style={{marginRight:20,width:80,height:80,borderRadius:7,borderColor:'#f9a533',borderWidth:3,justifyContent:'center',alignItems:'center'}}>
                         <GalleryIcon
-                        size={60}
+                        size={50}
                         color="#f9a533"
                         name="photo"
                         />

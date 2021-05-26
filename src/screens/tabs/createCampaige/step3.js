@@ -17,11 +17,14 @@ function Step3({getValue,values,next}){
     //firt data
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-    const [submit,setSubmit]=useState(false)
+    const [submit,setSubmit]=useState(false);
+    const [startDateCheck,setStartDateCheck]=useState(false)
+    const [endDateCheck,setEndDateCheck]=useState(false)
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || "";
         setShow(Platform.OS === 'ios');
         getValue('start_date',dateFormat(currentDate))
+        setStartDateCheck(currentDate)
       };
     
       const showMode = (currentMode) => {
@@ -41,6 +44,7 @@ function Step3({getValue,values,next}){
         const currentDate = selectedDate || "";
         setShow2(Platform.OS === 'ios');
         getValue('end_date',dateFormat(currentDate))
+        setEndDateCheck(currentDate)
       };
     
       const showMode2 = (currentMode) => {
@@ -141,7 +145,7 @@ function Step3({getValue,values,next}){
             </Text>
             <TouchableOpacity
             onPress={showDatepicker2}
-             style={{...styles.date,marginBottom:40}}>
+             style={{...styles.date}}>
             <DateIcon
                 name="date"
                 size={20}
@@ -150,7 +154,12 @@ function Step3({getValue,values,next}){
                 <Text style={{paddingLeft:20,color:'gray'}}>{values.end_date?values.end_date.toString().slice(0,16):'Please Select'}</Text>
             </TouchableOpacity>
             {!values.end_date && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Please Fill</Text>:null}
-            <View style={{marginBottom:40}}>
+            {values.end_date && values.start_date && submit?(
+
+              startDateCheck.getTime()>endDateCheck.getTime()?<Text style={{color:'red',textAlign:'right',fontSize:11}}>End date should be greater then start date</Text>:null
+
+            ):null}
+            <View style={{marginVertical:30}}>
             <FillBtn
             call={()=>{
                 setSubmit(true)

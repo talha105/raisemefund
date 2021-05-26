@@ -13,7 +13,7 @@ function App(){
     requestUserPermission()
 
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      Alert.alert('A new FCM message arrived! sdjflsdkjfl;ksdj', JSON.stringify(remoteMessage));
     });
     return unsubscribe;
     

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View,Text,Image,StyleSheet,Dimensions, Touchable, TouchableOpacity, BackHandler, ImageBackground, TextInput} from 'react-native';
 import Header from '../../components/backHeader';
 import InputField from "../../components/InputField";
@@ -17,6 +17,20 @@ function SignIn({navigation,login,setUserId,user}){
         email:"",
         password:"",
     })
+    const [serverError,setServerError]=useState("");
+
+    useEffect(()=>{
+        return navigation.addListener('focus',()=>{
+            setServerError("")
+        })
+    },[navigation])
+
+    const errorUseMemo=useMemo(()=>{
+        if(user.message){
+            setServerError(user.message)
+        }
+    },[user])
+    
     function getValue(k,v){
         setFields((pS)=>{
             return{
@@ -85,7 +99,7 @@ function SignIn({navigation,login,setUserId,user}){
                 <Text style={{width:'100%',textAlign:'right',marginTop:5,fontSize:12,color:'#2092a4'}}>FORGET PASSWORD</Text>
             </TouchableOpacity>
             </View>
-            {user.message?<Text style={{textAlign:'center',color:'red'}}>{user.message}</Text>:null}
+            {serverError?<Text style={{textAlign:'center',color:'red'}}>{serverError}</Text>:null}
             <View style={styles.con}>
                 {
                     loading?(

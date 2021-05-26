@@ -1,5 +1,5 @@
 import React, { Component,useState } from 'react';
-import { View, Text ,StyleSheet, TextInput} from 'react-native';
+import { View, Text ,StyleSheet, TextInput, ScrollView} from 'react-native';
 import InputField from '../../../components/InputField';
 import TitleIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import {Picker} from '@react-native-picker/picker';
@@ -9,6 +9,7 @@ import FillBtn from '../../../components/fillBtn';
 function Step2({getValue,values,next}){
     const [submit,setSubmit]=useState(false)
     return(
+        <ScrollView>
         <View style={styles.con}>
             <Text style={styles.title}>Describe why you are fundrasing</Text>
             <Text style={styles.text}>
@@ -55,6 +56,7 @@ function Step2({getValue,values,next}){
                 />
             </View>
         </View>
+        </ScrollView>
     )
 }
 
