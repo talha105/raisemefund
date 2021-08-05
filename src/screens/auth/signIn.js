@@ -51,13 +51,13 @@ function SignIn({navigation,login,setUserId,user}){
         }
     }
     return(
-        <View style={{height:height}}>
+        <View style={{flex:1}}>
             <Header
             title="sign-in"
             back={true}
             />
             <View style={{flex:1,justifyContent:'space-between'}}>
-            <View style={{height:height/4,justifyContent:'center',alignItems:'center'}}>
+            <View style={{paddingTop:20, justifyContent:'center',alignItems:'center'}}>
                 <Image
                 resizeMode="contain"
                 style={styles.img}
@@ -123,7 +123,7 @@ function SignIn({navigation,login,setUserId,user}){
             <View style={{height:height/3}}>
                 <ImageBackground
                 resizeMode="stretch"
-                style={{width:width,flex:1,justifyContent:'center',alignItems:'center'}}
+                style={{width:'100%',flex:1,justifyContent:'center',alignItems:'center'}}
                 source={require('../../../assets/footer.png')}
                 >
                     <View style={{justifyContent:'center',alignItems:'center'}}>

@@ -19,25 +19,27 @@ function Home({navigation,fetchCampaiges,campaiges,refreshCampaiges}){
     const [refresh,setRefresh]=useState(false)
 
     useEffect(()=>{
-        paginationMemo
+        fetchCampaiges(page)
+        getTotalPage()
     },[])
 
-    const paginationMemo=useMemo(()=>{
-        getTotalPage()
-        fetchCampaiges(page)
-    },[page])
-
-    function loadMore(){
-        if(page<totalPage){
+    function pagination(){
+        fetchCampaiges(page+1).then(()=>{
             setPage((ps)=>{
                 return ps+1
             })
+        })
+    }
+
+    function loadMore(){
+        if(page<totalPage){
+            pagination()
         }
     }
 
     async function getTotalPage(){
     const totalpage=await axios.get(`${api}/campaign-pagination?page=1`)
-    setTotalPage(totalpage.data.data.total)
+    setTotalPage(totalpage.data.data.last_page)
     }
 
     function footer(){
@@ -61,7 +63,7 @@ function Home({navigation,fetchCampaiges,campaiges,refreshCampaiges}){
                 <FlatList
             showsVerticalScrollIndicator={false}
             style={{flex:1}}
-            data={campaiges}
+            data={campaiges.filter(item=>item.status=="1")}
             renderItem={renderCampaige}
             keyExtractor={(item,i)=>i.toString()}
             onEndReachedThreshold={0.1}
@@ -94,7 +96,7 @@ function Home({navigation,fetchCampaiges,campaiges,refreshCampaiges}){
                 source={require('../../../../assets/header.png')}
                 >
                     <View style={{marginTop:20,width:'80%',justifyContent:'center',alignItems:'center',marginRight:'auto',marginLeft:'auto'}}>
-                        <Text style={{color:'white',fontSize:16,textAlign:'center',fontWeight:'700'}}>
+                        <Text style={{color:'white',fontSize:15,textAlign:'center',fontFamily:'Poppins-Medium'}}>
                             FUNDRAISES FOR THE PEOPLE AND CAUSES YOU CARE ABOUT
                         </Text>
                     </View>
@@ -113,8 +115,8 @@ function Home({navigation,fetchCampaiges,campaiges,refreshCampaiges}){
                     source={require('../../../../assets/mid.png')}
                     >
                     <View style={{width:'100%',flex:1,justifyContent:'space-around',alignItems:'center',paddingVertical:10}}>
-                        <Text style={{color:'#f9a533',fontSize:25,fontWeight:'700'}}>FUNDRAISE FOR</Text>
-                        <Text style={{color:'white',fontSize:17}}>WHICH CATEGORY INTEREST YOU?</Text>
+                        <Text style={{color:'#f9a533',fontSize:22,fontFamily:'Poppins-Medium'}}>FUNDRAISE FOR</Text>
+                        <Text style={{color:'white',fontSize:16,fontFamily:'Poppins-Medium'}}>WHICH CATEGORY INTEREST YOU?</Text>
                         <Text style={{width:'80%',textAlign:'center',color:'white'}}>
                         Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print
                         </Text>
@@ -130,11 +132,15 @@ function Home({navigation,fetchCampaiges,campaiges,refreshCampaiges}){
                     </View>
                 </ImageBackground>
             </View>
-            <Campaige 
-            data={item}
-            callDetails={()=>navigation.navigate('campaigeDetail',item)}
-            callDonate={()=>navigation.navigate('donate',item.id)}
-            />
+            <View style={{marginTop:20}}>
+                <Text style={{width:'90%',marginLeft:'auto',marginRight:'auto',fontFamily:'Poppins-Medium',fontSize:16,color:'gray'}}>Campaigns</Text>
+                <View style={{width:'90%',marginLeft:'auto',marginRight:'auto',backgroundColor:'gray',height:1,marginVertical:5}}/>
+                <Campaige 
+                data={item}
+                callDetails={()=>navigation.navigate('campaigeDetail',item)}
+                callDonate={()=>navigation.navigate('donate',item.campaign_id)}
+                />
+            </View>
             </>
             )
         }else{
@@ -142,7 +148,7 @@ function Home({navigation,fetchCampaiges,campaiges,refreshCampaiges}){
                 <Campaige
                 data={item}
                 callDetails={()=>navigation.navigate('campaigeDetail',item)}
-                callDonate={()=>navigation.navigate('donate',item.id)}
+                callDonate={()=>navigation.navigate('donate',item.campaign_id)}
                 />
             )
         }
@@ -164,7 +170,7 @@ function Home({navigation,fetchCampaiges,campaiges,refreshCampaiges}){
                         color="gray"
                         size={20}
                         />
-                        <Text style={{color:'gray',fontSize:16,marginLeft:15}}>SEARCH NOW</Text>
+                        <Text style={{color:'gray',fontSize:16,marginLeft:15,includeFontPadding:false}}>SEARCH NOW</Text>
             </TouchableOpacity>
             </View>
                 {renderContent()}

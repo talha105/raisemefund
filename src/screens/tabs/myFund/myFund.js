@@ -1,15 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {View, Text} from "react-native";
-import Header from "../../../components/backHeader"
 import FundList from "./list"
 
-function MyFund(){
+function MyFund({type}){
+    // console.log(props.route.key)
     return(
         <View style={{flex:1}}>
-            <Header
-            title="my fundraisers"
-            />
-            <FundList/>
+            <FundList type={type}/>
         </View>
     )
 }

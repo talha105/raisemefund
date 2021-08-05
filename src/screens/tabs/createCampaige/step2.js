@@ -9,7 +9,7 @@ import FillBtn from '../../../components/fillBtn';
 function Step2({getValue,values,next}){
     const [submit,setSubmit]=useState(false)
     return(
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.con}>
             <Text style={styles.title}>Describe why you are fundrasing</Text>
             <Text style={styles.text}>
@@ -62,8 +62,8 @@ function Step2({getValue,values,next}){
 
 const styles = StyleSheet.create({
     title:{
-        fontSize:20,
-        fontWeight:'700',
+        fontSize:18,
+        fontFamily:'Poppins-Bold',
         width:'70%'
     },
     con:{
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     },
     text:{
         color:'gray',
-        fontSize:17,
+        fontSize:15,
         marginTop:20,
         marginBottom:20
     }

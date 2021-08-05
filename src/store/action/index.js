@@ -9,7 +9,6 @@ import {
     DONOR_LIST,
     GET_CAT,
     SEARCH_CAT,
-    CLEAR_SEARCH_RESULT,
     GET_PROFILE,
     GET_NOTIFICATION,
     BADGE_INCREMENT
@@ -119,6 +118,7 @@ export const getCat=()=>async dispatch=>{
 }
 
 export const createCampaige=(data,renderModal,renderLoader)=>async dispatch=>{
+
     var file={
         uri:data.image_path.path,
         name:data.image_path.path.slice(data.image_path.path.lastIndexOf('/')+1,data.image_path.path.length),
@@ -130,20 +130,19 @@ export const createCampaige=(data,renderModal,renderLoader)=>async dispatch=>{
     bodyForm.append('title',data.title)
     bodyForm.append('description',data.description)
     bodyForm.append('amount',data.amount)
-    bodyForm.append('start_date',data.start_date)
+    // bodyForm.append('start_date',data.start_date)
     bodyForm.append('end_date',data.end_date)
     bodyForm.append('image_path',file)
     bodyForm.append('is_featured',data.is_featured)
 
     const res=await axios.post(`${api}/create_campaign`,bodyForm)
-    console.log(res)
 
     if(res.data.api_status=="true"){
-        console.log("done")
         renderLoader('hide')
         renderModal('show') 
     }else{
-        alert(res.data.message)
+        alert("from server"+res.data.message)
+        renderLoader('hide')
     }
 
 }
@@ -170,7 +169,6 @@ export const searchByCat=(text)=>async dispatch=>{
         }
     })
 
-    console.log(res.data)
     dispatch({
         type:SEARCH_CAT,
         payload:res.data.data
@@ -178,21 +176,17 @@ export const searchByCat=(text)=>async dispatch=>{
 
 }
 
-export const clearSearchResult=()=>dispatch=>{
-    dispatch({
-        type:CLEAR_SEARCH_RESULT,
-        payload:{loading:true}
-    })
-}
 
 export const donateNow=(data,renderLoader,renderModal)=>async dispatch=>{
 
     const res=await axios.post(`${api}/donation`,data)
-    
     if(res.data.api_status=="true"){
         renderModal('show')
     }
-    renderLoader('hide')
+    else{
+        renderLoader('hide')
+        alert(res.data)
+    }
 
 }
 
@@ -239,15 +233,15 @@ export const updateProfile=(data,renderModel,renderLoader)=>async dispatch=>{
 
 }
 
-export const getNotifcation=()=>async dispatch=>{
-
-    const res=await axios.get(`${api}/notify`)
+export const getNotifcation=(user_id)=>async dispatch=>{    
+    const res=await axios.post(`${api}/notify`,{
+        user_id
+    })
 
     dispatch({
         type:GET_NOTIFICATION,
-        payload:res.data.data
+        payload:res.data.data.reverse()
     })
-
 }
 
 export const badgeIncrement=()=>async dispatch=>{
@@ -256,4 +250,14 @@ export const badgeIncrement=()=>async dispatch=>{
         payload:1
     })
 
+}
+
+export const resetPassword=(email)=>async dispatch=>{
+
+        const res=await axios.post(`${api}/password/email`,null,{
+            params:{
+                email:email
+            }
+        })
+        return res.data
 }

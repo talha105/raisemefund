@@ -1,5 +1,5 @@
 import React, { Component,useEffect,useState } from 'react';
-import { View, Text ,StyleSheet} from 'react-native';
+import { View, Text ,StyleSheet, ScrollView} from 'react-native';
 import InputField from '../../../components/InputField';
 import MoneyIcon from "react-native-vector-icons/MaterialIcons";
 import {Picker} from '@react-native-picker/picker';
@@ -16,6 +16,7 @@ function Step1({getValue,values,next,cat,getCat}){
     },[])
     return(
         <View style={styles.con}>
+            <ScrollView style={{flex:1}} showsVerticalScrollIndicator={false}>
             <Text style={styles.title}>FUNDRAISER DETAIL</Text>
             <Text style={styles.text}>
                 How much would you like to raise?
@@ -53,7 +54,7 @@ function Step1({getValue,values,next,cat,getCat}){
                 </Picker>
             </View>
             {!values.category_id && submit?<Text style={{color:'red',textAlign:'right'}}>Please select</Text>:null}
-            <View style={{marginTop:20}}>
+            <View style={{marginTop:20,marginBottom:20}}>
                 <FillBtn
                 text="Continue"
                 call={()=>{
@@ -64,16 +65,18 @@ function Step1({getValue,values,next,cat,getCat}){
                 }}
                 />
             </View>
+            </ScrollView>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     title:{
-        fontSize:20,
-        fontWeight:'700',
+        fontSize:18,
+        fontFamily:'Poppins-Bold',
     },
     con:{
+        flex:1,
         marginTop:40,
         width:'90%',
         marginLeft:'auto',
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
     },
     text:{
         color:'gray',
-        fontSize:17,
+        fontSize:15,
         marginTop:20,
         marginBottom:20
     }

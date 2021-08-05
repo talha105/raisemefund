@@ -4,9 +4,10 @@ import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
 function FillBtn ({text,call,color}){
     return (
         <TouchableOpacity 
+        activeOpacity={0.5}
         onPress={call}
         style={{...styles.blueBtn,backgroundColor:color?color:'#1d879a'}}>
-            <Text style={{color:'white',fontSize:18}}>{text.toUpperCase()}</Text>
+            <Text style={{color:'white',fontSize:16,fontFamily:'Poppins-Medium',includeFontPadding:false}}>{text.toUpperCase()}</Text>
         </TouchableOpacity>
       );
 }

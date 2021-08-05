@@ -94,12 +94,12 @@ function CreateCampaige({userId,createCampaige,navigation}){
             visible={model}
             title="Successfully created"
             closeModle={()=>renderModel('hide')}
-            reDirect={()=>navigation.navigate('myFund')}
+            reDirect={()=>navigation.jumpTo('myFund')}
             />
             <Header
             title="create fundraiser"
             />
-            <View style={{flexDirection:'row',alignItems:'center'}}s>
+            <View style={{flexDirection:'row',alignItems:'center',paddingVertical:10}}>
             {step!==1?
             <TouchableOpacity 
             onPress={pre}
@@ -135,7 +135,6 @@ const styles=StyleSheet.create({
         justifyContent:'space-between'
     },
     stepHead:{
-        height:60,
         textAlignVertical:'center',
         paddingLeft:10,
         fontSize:18,

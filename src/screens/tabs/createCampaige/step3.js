@@ -1,5 +1,5 @@
 import React, { Component,useState } from 'react';
-import { View, Text,StyleSheet, Image,Dimensions, TextInput,TouchableOpacity, ScrollView } from 'react-native';
+import {Platform, View, Text,StyleSheet, Image,Dimensions, TextInput,TouchableOpacity, ScrollView } from 'react-native';
 import ImgIcon from "react-native-vector-icons/Entypo"
 import DateIcon from "react-native-vector-icons/Fontisto"
 import FillBtn from '../../../components/fillBtn';
@@ -11,9 +11,10 @@ import dateFormat from "../../../utils/formatDate"
 const {width,height}=Dimensions.get('window')
 
 function Step3({getValue,values,next}){
+  
     const [imageModel,setImageModel]=useState(false)
     const [img,setImg]=useState('')
-
+    console.log("image",img)
     //firt data
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
@@ -128,7 +129,7 @@ function Step3({getValue,values,next}){
                 <Text style={{color:'#f9a533',marginLeft:10}}>UPLOAD PHOTO</Text>
             </TouchableOpacity>
             {!values.image_path && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Please Fill</Text>:null}
-            <Text style={styles.subTitle}>
+            {/* <Text style={styles.subTitle}>
                 Start Date
             </Text>
             <TouchableOpacity onPress={showDatepicker} style={styles.date}>
@@ -139,7 +140,7 @@ function Step3({getValue,values,next}){
                 />
                 <Text style={{paddingLeft:20,color:'gray'}}>{values.start_date?values.start_date:'Please Select'}</Text>
             </TouchableOpacity>
-            {!values.start_date && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Please Fill</Text>:null}
+            {!values.start_date && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Please Fill</Text>:null} */}
             <Text style={styles.subTitle}>
                 End Date
             </Text>
@@ -154,16 +155,28 @@ function Step3({getValue,values,next}){
                 <Text style={{paddingLeft:20,color:'gray'}}>{values.end_date?values.end_date.toString().slice(0,16):'Please Select'}</Text>
             </TouchableOpacity>
             {!values.end_date && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Please Fill</Text>:null}
-            {values.end_date && values.start_date && submit?(
+            {endDateCheck && submit?(
 
-              startDateCheck.getTime()>endDateCheck.getTime()?<Text style={{color:'red',textAlign:'right',fontSize:11}}>End date should be greater then start date</Text>:null
+            new Date().getTime()>endDateCheck.getTime()?<Text style={{color:'red',textAlign:'right',fontSize:11}}>End date should be greater then start date</Text>:null
 
             ):null}
+                <View style={{width:'100%'}}>
+                {show2 && (
+                <DateTimePicker
+                  testID="dateTimePicker2"
+                  value={new Date()}
+                  mode={mode2}
+                  is24Hour={true}
+                  display={Platform.OS=="ios"?"spinner":"default"}
+                  onChange={onChangeEnd}
+                />
+              )}
+                </View>
             <View style={{marginVertical:30}}>
             <FillBtn
             call={()=>{
                 setSubmit(true)
-                if(values.start_date && values.end_date && values.image_path){
+                if(values.end_date && values.image_path && endDateCheck.getTime()>new Date().getTime() ){
                     next()
                 }
             }}
@@ -176,18 +189,8 @@ function Step3({getValue,values,next}){
           value={new Date()}
           mode={mode}
           is24Hour={true}
-          display="default"
+          display={Platform.OS=="ios"?"spinner":"default"}
           onChange={onChange}
-        />
-      )}
-                  {show2 && (
-        <DateTimePicker
-          testID="dateTimePicker2"
-          value={new Date()}
-          mode={mode2}
-          is24Hour={true}
-          display="default"
-          onChange={onChangeEnd}
         />
       )}
         </ScrollView>
@@ -204,8 +207,8 @@ const styles = StyleSheet.create({
         marginVertical:10
     },
     title:{
-        fontSize:20,
-        fontWeight:'700',
+        fontSize:18,
+        fontFamily:'Poppins-Bold',
         width:'70%'
     }
     ,
@@ -217,8 +220,8 @@ const styles = StyleSheet.create({
     },
     subTitle:{
         color:'gray',
-        fontSize:17,
-        marginTop:40
+        fontSize:15,
+        marginTop:20
     },
     btn:{
         marginTop:10,

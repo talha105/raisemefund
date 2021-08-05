@@ -1,21 +1,17 @@
 import React, { Component, useEffect } from 'react';
-import { View, Text ,Alert} from 'react-native';
+import { View , SafeAreaView} from 'react-native';
 import {connect, Provider} from "react-redux"
 import store from "./store/index";
 import Routes from "./route";
 import SplashScreen from 'react-native-splash-screen'
 import messaging from '@react-native-firebase/messaging';
-
+import GlobalFont from 'react-native-global-font'
 
 function App(){
   useEffect(()=>{
     SplashScreen.hide();
+    GlobalFont.applyGlobal("Poppins-Regular")
     requestUserPermission()
-
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived! sdjflsdkjfl;ksdjwerwe', JSON.stringify(remoteMessage));
-    });
-    return unsubscribe;
     
   },[])
 
@@ -31,12 +27,15 @@ function App(){
     }
   }
   return (
-    <Provider store={store}>
-      <View style={{flex:1}}>
-      <Routes/>
-    </View>
-    </Provider>
+      <SafeAreaView style={{flex:1}}> 
+        <Provider store={store}>
+          <View style={{flex:1}}>
+          <Routes/>
+        </View>
+        </Provider>
+      </SafeAreaView>
   );
 }
+export default App;
 
-export default App
+

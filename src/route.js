@@ -28,6 +28,8 @@ import ResetPassword from "./screens/auth/resetPassword"
 import Profile from "./screens/tabs/me/profile/profile"
 import Help from "./screens/tabs/me/profile/help"
 import messaging from '@react-native-firebase/messaging';
+import FundTabs from "./screens/tabs/myFund/tabs";
+import PushNotification from "react-native-push-notification";
 const Stack=createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
@@ -68,6 +70,11 @@ function HomeRoutes(){
 function MyFundRoutes(){
   return(
     <Stack.Navigator>
+        <Stack.Screen
+        name="fundTabs"
+        component={FundTabs}
+        options={{headerShown:false}}
+        />
       <Stack.Screen
         name="myFund"
         component={MyFund}
@@ -130,7 +137,7 @@ function Tabs({initialRoute}){
         name="notification"
         component={Notification}
         options={{
-          title:"NOTIFICATION",
+          title:"Notification",
           tabBarIcon:({color})=><NotIcon name="notifications" size={20} color={color}/>
         }}
         />
@@ -146,7 +153,7 @@ function Tabs({initialRoute}){
         name="myFund"
         component={MyFundRoutes}
         options={{
-          title:"MY FUNDRAISE",
+          title:"My Fundraises",
           tabBarIcon:({color})=><HomeIcon name="newspaper" size={20} color={color}/>
         }}
         />
@@ -205,37 +212,61 @@ function Routes({userId,setUserId}){
 
   useEffect(()=>{
     renderScreens()
-    if(userId){
       messaging()
       .subscribeToTopic('weather')
       .then(() => console.log('Subscribed to topic!'));
-    }
 
+
+      // PushNotification.createChannel(
+      //   {
+      //     channelId: "channel-id", // (required)
+      //     channelName: "My channel", // (required)
+      //     channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+      //     playSound: false, // (optional) default: true
+      //     soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+      //     vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+      //   },
+      //   (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+      // );
     
-            // Assume a message-notification contains a "type" property in the data payload of the screen to open
+      // Assume a message-notification contains a "type" property in the data payload of the screen to open
 
-            messaging().onNotificationOpenedApp(remoteMessage => {
-              console.log(
-                'Notification caused app to open from background state:',
-                remoteMessage.notification,
-              );
-              if(navigation.current){
-                navigation.current.navigate("notification")
-              }
-            });
-        
-            // Check whether an initial notification is available
-            messaging()
-              .getInitialNotification()
-              .then(remoteMessage => {
-                if (remoteMessage) {
-                  console.log(
-                    'Notification caused app to open from quit state:',
-                    remoteMessage.notification,
-                  );
-                  setInitialRoute("notification"); // e.g. "Settings"
-                }
-              });
+      messaging().onNotificationOpenedApp(remoteMessage => {
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage.notification,
+        );
+        if(navigation.current){
+          navigation.current.navigate("notification")
+        }
+      });
+  
+      // Check whether an initial notification is available
+      messaging()
+        .getInitialNotification()
+        .then(remoteMessage => {
+          if (remoteMessage) {
+            console.log(
+              'Notification caused app to open from quit state:',
+              remoteMessage.notification,
+            );
+            setInitialRoute("notification"); // e.g. "Settings"
+          }
+        });
+
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+          PushNotification.localNotification({
+            channelId: "channel-id",
+            channelName: "My channel",
+            message:remoteMessage.notification.body,
+            playSound:true,
+            title:remoteMessage.notification.title,
+            priority:'high',
+            soundName:'default',
+            
+          })
+        });
+        return unsubscribe;
   },[])
 
 

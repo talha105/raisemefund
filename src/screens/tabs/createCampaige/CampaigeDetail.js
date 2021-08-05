@@ -21,7 +21,7 @@ const {height,width}=Dimensions.get('window')
 function CampaigeDetail({route,donorList,donors,userId,navigation}){
 
     useEffect(()=>{
-        donorList(route.params.id)
+        donorList(route.params.id?route.params.id:route.params.campaign_id)
     },[])
 
     function donationPer(donationAmount,amount){
@@ -64,25 +64,19 @@ function CampaigeDetail({route,donorList,donors,userId,navigation}){
             title={"Campaige Detail"}
             back={true}
             />
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <Image
                 style={styles.img}
                 source={{uri:route.params.image_path}}
                 />
-            <View style={{width:'100%',backgroundColor:'lightgray'}}>
-                <View
-                style={{...styles.line,width:donationPer(route.params.donatedAmount,route.params.amount)>100?'100%':donationPer(route.params.donatedAmount,route.params.amount).toString()+'%'}}
-                />
-            </View>
             <View style={styles.con2}>
                 <View>
                 <View>
-                <Text style={{fontSize:22,fontWeight:'bold',color:'gray',marginTop:15}}>{route.params.title.toUpperCase()}</Text>
+                <Text style={{fontSize:22,fontFamily:'Poppins-Medium',color:'gray',marginTop:15}}>{route.params.title.toUpperCase()}</Text>
                 <Text style={{fontSize:22,color:'#2092a4'}}>{route.params.amount}$</Text>
                 </View>
                 <Text>{route.params.category_name}</Text>
                 </View>
-                <Text>100/<Text style={{color:'green'}}>{donationPer(route.params.donatedAmount,route.params.amount)>100?100:donationPer(route.params.donatedAmount,route.params.amount)}</Text></Text>
             </View>
             <View style={styles.topLine}/>
             <View style={{backgroundColor:'#e5e5e5',marginHorizontal:10,padding:10,marginTop:10}}>
@@ -93,6 +87,15 @@ function CampaigeDetail({route,donorList,donors,userId,navigation}){
                 <Text>Start Date {route.params.start_date}</Text>
                 <Text>End Date {route.params.end_date}</Text>
             </View>
+            </View>   
+            <View style={{width:'95%',marginLeft:'auto',marginRight:'auto'}}>
+                <View style={{backgroundColor:'#cacaca',width:'100%',borderRadius:10,marginTop:10}}>
+                        <View style={{...styles.line,borderRadius:10,width:donationPer(route.params.donatedAmount,route.params.amount)>100?'100%':donationPer(route.params.donatedAmount,route.params.amount).toString()+"%"}}/>
+                    </View>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'flex-end',width:'100%',marginTop:5}}>
+                        <Text style={{fontFamily:'Poppins-Medium',color:'#3fa91e'}}><Text style={{color:'gray'}}>${route.params.amount+" / "}</Text>${route.params.donatedAmount}</Text>
+                        <Text style={{color:'#3fa91e'}}>{donationPer(route.params.donatedAmount,route.params.amount)>100?100:donationPer(route.params.donatedAmount,route.params.amount)}%</Text>
+                </View>
             </View>
             <View>
                 <Text style={{fontSize:16,color:'green',marginLeft:10,marginTop:20}}>DONORS</Text>
@@ -100,16 +103,16 @@ function CampaigeDetail({route,donorList,donors,userId,navigation}){
                 {renderDonors()}
                 <View style={styles.donor}>
                     <Text>TOTAL DONATION</Text>
-                    <Text style={{color:'green',fontWeight:'700',fontSize:18}}>{route.params.donatedAmount+"$"}</Text>
+                    <Text style={{color:'green',fontFamily:'Poppins-Medium',fontSize:18}}>${route.params.donatedAmount}</Text>
                 </View>
             <View>
                 </View>
             </View>
             <View style={{width:'95%',marginLeft:'auto',marginRight:'auto'}}>
                 <FillBtn
-                call={()=>navigation.navigate('donate',route.params.id)}
-                color="#f9a533"
-                text="DONATE NOW"
+                call={()=>(route.params.inactive?"":navigation.navigate('donate',route.params.id))}
+                color={route.params.inactive?'red':"#f9a533"}
+                text={route.params.inactive?"INACTIVE":"DONATE NOW"}
                 />
             </View>
             </ScrollView>
@@ -123,8 +126,8 @@ const styles = StyleSheet.create({
         height:height/3
     },
     line:{
-        height:10,
-        backgroundColor:'#2092a4'
+        height:6,
+        backgroundColor:'#3fa91e'
     },
     con2:{
         flexDirection:'row',

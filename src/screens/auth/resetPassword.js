@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View,Text,Image,StyleSheet,Dimensions, Touchable, TouchableOpacity, BackHandler, ImageBackground, TextInput} from 'react-native';
+import { View,Text,Image,StyleSheet,Dimensions, Touchable, TouchableOpacity, BackHandler, ImageBackground, TextInput, Modal} from 'react-native';
 import Header from '../../components/backHeader';
 import InputField from "../../components/InputField";
 import MailIcon from "react-native-vector-icons/MaterialCommunityIcons"
@@ -9,10 +9,11 @@ import BackIcon from "react-native-vector-icons/Ionicons";
 import Password from "../../components/password"
 import LoaderBtn from '../../components/Loader';
 import { connect } from 'react-redux';
-import * as actions from "../../store/action"
+import * as actions from "../../store/action";
+import SuccessModel from "../../components/succesModel"
 
 const {width,height}=Dimensions.get('window')
-function ResetPassword({navigation,login,setUserId}){
+function ResetPassword({navigation,login,setUserId,resetPassword}){
     const [fields,setFields]=useState({
         email:"",
     })
@@ -26,6 +27,8 @@ function ResetPassword({navigation,login,setUserId}){
     }
     const [submit,setSubmit]=useState(false)
     const [loading,setLoading]=useState(false)
+    const [model, setModel]=useState(false)
+    const [error,setError]=useState("")
     
     function renderLoader(con){
         if(con==="show"){
@@ -35,14 +38,29 @@ function ResetPassword({navigation,login,setUserId}){
             setLoading(false)
         }
     }
+
+    function renderModel(con){
+        if(con==="show"){
+            setModel(true)
+        }
+        if(con==="hide"){
+            setModel(false)
+        }
+    }
     return(
-        <View style={{height:height}}>
+        <View style={{flex:1}}>
             <Header
             title="RESET PASSWORD"
             back={true}
             />
+            <SuccessModel
+            visible={model}
+            closeModle={()=>renderModel('hide')}
+            title="Reset password link sent on your email id and will be expired in 60 minutes"
+            reDirect={()=>navigation.push('signIn')}
+            />
             <View style={{flex:1,justifyContent:'space-between'}}>
-            <View style={{height:height/4,justifyContent:'center',alignItems:'center'}}>
+            <View style={{justifyContent:'center',alignItems:'center',paddingTop:20}}>
                 <Image
                 resizeMode="contain"
                 style={styles.img}
@@ -64,6 +82,8 @@ function ResetPassword({navigation,login,setUserId}){
                 placeHolder="Email Address"
                 />
                 {!fields.email && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Please Fill</Text>:null}
+                {!fields.email.includes('@') && fields.email.length?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Invalid Email</Text>:null}
+                {error && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>{error}</Text>:null}
             </View>
             <View style={styles.con}>
                 {
@@ -75,9 +95,18 @@ function ResetPassword({navigation,login,setUserId}){
                         <FillBtn
                         call={()=>{
                             setSubmit(true)
-                            if(fields.password && fields.email){
+                            if(fields.email && fields.email.includes('@')){
                                 renderLoader('show')
-                                login(fields,renderLoader,setUserId)
+                                resetPassword(fields.email,renderLoader).then((res)=>{
+                                    console.log(res)
+                                    if(res.api_status=="true"){
+                                        renderModel("show")
+                                        renderLoader('hide')
+                                    }else{
+                                        setError(res.message)
+                                        renderLoader('hide')
+                                    }
+                                })
                             }
                         }}
                         text="Sign in"
@@ -88,7 +117,7 @@ function ResetPassword({navigation,login,setUserId}){
             <View style={{height:height/3}}>
                 <ImageBackground
                 resizeMode="stretch"
-                style={{width:width,flex:1,justifyContent:'center',alignItems:'center'}}
+                style={{width:'100%',flex:1,justifyContent:'center',alignItems:'center'}}
                 source={require('../../../assets/footer.png')}
                 >
                     <View style={{justifyContent:'center',alignItems:'center'}}>

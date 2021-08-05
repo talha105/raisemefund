@@ -18,7 +18,7 @@ function Header ({title,back}){
                         />
                     </TouchableOpacity>
                 ):null}
-                <Text style={{fontSize:18,fontWeight:'700',marginTop:3}}>{title.toUpperCase()}</Text>
+                <Text style={{fontSize:18,fontFamily:'Poppins-Bold',marginTop:3}}>{title.toUpperCase()}</Text>
             </View>
 
             <View style={{height:1,backgroundColor:'lightgray'}}/>

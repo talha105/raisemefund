@@ -1,24 +1,38 @@
-import React, { useEffect } from "react";
-import {View, Text, StyleSheet, FlatList} from "react-native";
+import React, { useEffect, useState } from "react";
+import {View, Text, StyleSheet, FlatList, TouchableOpacity} from "react-native";
 import Header from "../../../components/backHeader";
 import * as actions from "../../../store/action"
 import {connect} from "react-redux"
 import List from "./list"
 import Empty from "./emty"
 import Loader from "../../../components/pageLoader";
+import NotifyModel from "../../../components/notifyModel"
 
-function Notification({notification,getNotifcation}){
+function Notification({notification,getNotifcation,userId}){
 
     useEffect(()=>{
-        getNotifcation()
+        getNotifcation(userId)
     },[])
+
+    const [currentData,setCurrentData]=useState({})
+    const [visible,setVisible]=useState(false);
+
+    function renderModel(con){
+        con?setVisible(true):setVisible(false)
+    }
 
     function renderNotification({item}){
         return(
-            <View style={styles.notCon}>
+            <TouchableOpacity 
+            onPress={()=>{
+                setCurrentData(item)
+                renderModel(true)
+            }}
+            style={styles.notCon}
+            >
                 <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.des}>{item.description?item.description.slice(0,100)+"...":null}</Text>
-            </View>
+                <Text style={styles.des}>{item.description?item.description.slice(0,70)+"...":null}</Text>
+            </TouchableOpacity>
         )
     }
 
@@ -31,6 +45,7 @@ function Notification({notification,getNotifcation}){
         }else{
             return (
                 <FlatList
+                showsVerticalScrollIndicator={false}
                 style={{flex:1,marginTop:5}}
                 data={notification}
                 keyExtractor={(item,i)=>i.toString()}
@@ -44,6 +59,12 @@ function Notification({notification,getNotifcation}){
         <View style={{flex:1}}>
             <Header
             title="Notification"
+            />
+            <NotifyModel
+            title={currentData.title}
+            des={currentData.description}
+            visible={visible}
+            closeModle={()=>renderModel(false)}
             />
             {renderContent()}
         </View>
@@ -77,8 +98,8 @@ const styles=StyleSheet.create({
     }
 })
 
-function mapStateToProps({notification}){
-    return {notification}
+function mapStateToProps({notification,userId}){
+    return {notification,userId}
 }
 
 export default connect(mapStateToProps,actions)(Notification);

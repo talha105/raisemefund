@@ -15,7 +15,7 @@ function SuccessModel({visible,closeModle,title,reDirect}){
                 <View style={styles.con}>
                     <View style={{flex:1,justifyContent:'center',width:'100%',alignItems:'center'}}>
                         <IconSuccess name="checkcircle" color="green" size={35}/>
-                        <Text style={{color:'gray',marginTop:20}}>{title.toUpperCase()}</Text>
+                        <Text style={{color:'gray',marginTop:20,textAlign:'center',width:'90%'}}>{title.toUpperCase()}</Text>
                     </View>
                     <TouchableOpacity style={styles.btn} onPress={()=>{
                         reDirect?reDirect():null

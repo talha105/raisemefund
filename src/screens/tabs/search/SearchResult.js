@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {View,Text, TextInput, StyleSheet, FlatList} from "react-native";
 import { connect } from "react-redux";
 import Header from "../../../components/backHeader"
@@ -6,19 +6,15 @@ import Campaige from "../../../components/campaige";
 import * as actions from "../../../store/action";
 import Loader from "../../../components/pageLoader"
 
-function SearchResult({navigation,searchCampaiges,route,searchByText,searchByCat,clearSearchResult}){
+function SearchResult({navigation,searchCampaiges,route,searchByText,searchByCat}){
 
+    const [loading,setLoading]=useState(true)
     useEffect(()=>{
-
-        console.log(route.params)
         if(route.params.category){
-            searchByCat(route.params.category)
+            searchByCat(route.params.category).then(()=>setLoading(false))
         }else{
-            searchByText(route.params)
+            searchByText(route.params).then(()=>setLoading(false))
         }
-        navigation.addListener('blur',()=>{
-            clearSearchResult()
-        })
     },[])
 
     function renderCampaige({item}){
@@ -33,26 +29,28 @@ function SearchResult({navigation,searchCampaiges,route,searchByText,searchByCat
     }
 
     function renderContent(){
-        if(searchCampaiges.length>0){
-            return(
-                    <View style={{flex:1}}>
-                        <FlatList
-                        data={searchCampaiges}
-                        renderItem={renderCampaige}
-                        keyExtractor={(item,i)=>i.toString()}
-                        />
-                    </View>
-            )
-        }
-        if(searchCampaiges.length==0){
-            return (
-                <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-                    <Text style={{fontSize:20}}>No Result Found</Text>
-                </View>
-            )
-        }
-        if(searchCampaiges.loading==true){
+
+        if(loading){
             return <Loader/>
+        }else{
+            if(searchCampaiges.length>0){
+                return(
+                        <View style={{flex:1}}>
+                            <FlatList
+                            data={searchCampaiges}
+                            renderItem={renderCampaige}
+                            keyExtractor={(item,i)=>i.toString()}
+                            />
+                        </View>
+                )
+            }
+            if(searchCampaiges.length==0){
+                return (
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{fontSize:20,fontFamily:'Poppins-Bold'}}>No Result Found</Text>
+                    </View>
+                )
+            }
         }
     }
 

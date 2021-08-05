@@ -7,7 +7,7 @@ import {connect} from "react-redux"
 import * as actions from "../../../store/action"
 import {imgBaseUrl} from "../../../config/config.json"
 
-function FundList({userCampaiges,fetchUserCampaiges,userId}){
+function FundList({userCampaiges,fetchUserCampaiges,userId,type}){
     const navigation=useNavigation()
     const [refresh,setRefresh]=useState(false)
     useEffect(()=>{
@@ -15,13 +15,24 @@ function FundList({userCampaiges,fetchUserCampaiges,userId}){
     },[])
 
     function myFund({item}){
-        return(
-            <Campaige
-            data={item}
-            callDetails={()=>navigation.navigate('campaigeDetail',item)}
-            callDonate={()=>navigation.navigate('donate',item.id)}
-            />
-        )
+        if(type=="inactive"){
+            return(
+                <Campaige
+                data={item}
+                callDetails={()=>navigation.navigate('campaigeDetail',{...item,inactive:true})}
+                callDonate={()=>navigation.navigate('donate',item.id)}
+                inactive={true}
+                />
+            )
+        }else{
+            return(
+                <Campaige
+                data={item}
+                callDetails={()=>navigation.navigate('campaigeDetail',item)}
+                callDonate={()=>navigation.navigate('donate',item.id)}
+                />
+            )
+        }
     }
     function onRefresh(){
         setRefresh(true)
@@ -32,15 +43,29 @@ function FundList({userCampaiges,fetchUserCampaiges,userId}){
 
     function renderContent(){
         if(userCampaiges.length>0){
-            return(
-                <FlatList
-            data={userCampaiges}
-            renderItem={myFund}
-            keyExtractor={(item,i)=>i.toString()}
-            refreshing={refresh}
-            onRefresh={onRefresh}
-            />
-            )
+            if(type=="inactive"){
+                return(
+                    <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={userCampaiges.filter((cam)=>cam.status==0)}
+                    renderItem={myFund}
+                    keyExtractor={(item,i)=>i.toString()}
+                    refreshing={refresh}
+                    onRefresh={onRefresh}
+                />
+                )
+            }else{
+                return(
+                    <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={userCampaiges.filter((cam)=>cam.status==1)}
+                    renderItem={myFund}
+                    keyExtractor={(item,i)=>i.toString()}
+                    refreshing={refresh}
+                    onRefresh={onRefresh}
+                />
+                )
+            }
         }
         else if(userCampaiges.length==0){
             return(

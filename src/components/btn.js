@@ -6,7 +6,7 @@ function Btn ({text,call}){
         <TouchableOpacity 
         onPress={call}
         style={{...styles.blueBtn,backgroundColor:'rgba(0,0,0,0)',borderColor:'#f9a533',borderWidth:1.5}}>
-        <Text style={{color:'#f9a533',fontSize:18}}>{text.toUpperCase()}</Text>
+        <Text style={{color:'#f9a533',fontSize:18,fontFamily:'Poppins-Medium'}}>{text.toUpperCase()}</Text>
     </TouchableOpacity>
       );
 }

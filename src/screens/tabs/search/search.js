@@ -12,6 +12,7 @@ const {width,height}=Dimensions.get('window')
 function Search({navigation}){
 
     const [searchText,setSearchText]=useState("")
+    const [submit,setSubmit]=useState(false)
 
     return(
         <View style={{flex:1,paddingBottom:10}}>
@@ -20,14 +21,20 @@ function Search({navigation}){
             back={true}
             />
             <View 
-            style={{marginTop:10,marginBottom:10,flexDirection:'row',justifyContent:'space-between',width:'90%',backgroundColor:'white',borderRadius:7,marginLeft:'auto',marginRight:'auto',alignItems:'center',paddingHorizontal:15,height:40}}>
+            style={{marginTop:10,marginBottom:10,flexDirection:'row',justifyContent:'space-between',width:'90%',backgroundColor:'white',borderRadius:7,marginLeft:'auto',marginRight:'auto',alignItems:'center',paddingHorizontal:15,height:40,borderWidth:0.75,borderColor:!searchText && submit?'red':null}}>
                         <TextInput
                         placeholder="SEARCH"
-                        style={{flex:1}}
+                        style={{flex:1,fontFamily:'Poppins-Medium',includeFontPadding:false}}
                         onChangeText={v=>setSearchText(v)}
                         />
                         <TouchableOpacity
-                        onPress={()=>navigation.navigate('searchResult',searchText)}
+                        onPress={()=>{
+                            setSubmit(true)
+                            if(searchText){
+                                setSubmit(false)
+                                navigation.navigate('searchResult',searchText)
+                            }
+                        }}
                         >
                         <SearchIcon
                         name="search"
@@ -36,7 +43,7 @@ function Search({navigation}){
                         />
                         </TouchableOpacity>
             </View>
-            <ScrollView style={{flex:1}}>
+            <ScrollView style={{flex:1}} showsVerticalScrollIndicator={false}>
                 <View style={styles.con}>
                     <TouchableOpacity
                     onPress={()=>navigation.navigate('searchResult',{category:'medical'})}
@@ -47,7 +54,7 @@ function Search({navigation}){
                         color="white"
                         size={50}
                         />
-                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontWeight:'700'}}>MEDICAL</Text>
+                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontFamily:'Poppins-Medium'}}>MEDICAL</Text>
                     </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -59,7 +66,7 @@ function Search({navigation}){
                         color="white"
                         size={50}
                         />
-                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontWeight:'700'}}>EMERGENCY</Text>
+                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontFamily:'Poppins-Medium'}}>EMERGENCY</Text>
                     </View>
                     </TouchableOpacity>
                 </View>
@@ -73,7 +80,7 @@ function Search({navigation}){
                         color="white"
                         size={50}
                         />
-                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontWeight:'700'}}>EDUCATION</Text>
+                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontFamily:'Poppins-Medium'}}>EDUCATION</Text>
                     </View>
                    </TouchableOpacity>
                    <TouchableOpacity
@@ -85,7 +92,7 @@ function Search({navigation}){
                         color="white"
                         size={50}
                         />
-                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontWeight:'700'}}>HOSPITAL</Text>
+                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontFamily:'Poppins-Medium'}}>HOSPITAL</Text>
                     </View>
                    </TouchableOpacity>
                 </View>
@@ -99,7 +106,7 @@ function Search({navigation}){
                         color="white"
                         size={50}
                         />
-                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontWeight:'700'}}>MEMORIAL</Text>
+                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontFamily:'Poppins-Medium'}}>MEMORIAL</Text>
                     </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -111,7 +118,7 @@ function Search({navigation}){
                         color="white"
                         size={50}
                         />
-                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontWeight:'700'}}>NON PROFIT</Text>
+                        <Text style={{fontSize:15,color:'white',paddingTop:10,fontFamily:'Poppins-Medium'}}>NON PROFIT</Text>
                     </View>
                     </TouchableOpacity>
                 </View>

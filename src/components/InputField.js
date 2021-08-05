@@ -30,6 +30,7 @@ input:{
     paddingRight: 10,
     paddingBottom: 10,
     paddingLeft: 30,
+    includeFontPadding:false
 
 },
 con: {

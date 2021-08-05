@@ -43,10 +43,9 @@ function Step4({details,subMit,cat,getCat}){
             <View style={{marginTop:10}}>
             <Text style={{backgroundColor:'#e1e1e1',padding:10,color:'gray',fontSize:13}}>{details.description}</Text>
             </View>
-            <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:10}}>
-                <Text style={{fontSize:13,color:'#1d879a'}}>{details.start_date.toString().slice(0,15)}</Text>
-                <Text style={{fontSize:13}}>To</Text>
-                <Text style={{fontSize:13,color:'#1d879a'}}>{details.end_date.toString().slice(0,15)}</Text>
+            <View style={{flexDirection:'row',marginTop:10}}>
+                <Text style={{fontSize:13,color:'black'}}>End Date: </Text>
+                <Text style={{fontSize:13,color:'#1d879a',marginLeft:10}}>{details.end_date.toString().slice(0,15)}</Text>
             </View>
             <View style={{marginVertical:20}}>
                 {loading?<Loader color="#1d879a"/>:(
@@ -65,8 +64,8 @@ function Step4({details,subMit,cat,getCat}){
 
 const styles = StyleSheet.create({
     title:{
-        fontSize:20,
-        fontWeight:'700',
+        fontSize:18,
+        fontFamily:'Poppins-Bold',
         width:'70%'
     },
     con:{

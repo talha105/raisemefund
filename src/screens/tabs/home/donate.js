@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View,Text,Image,StyleSheet,Dimensions, Touchable, TouchableOpacity, BackHandler, ImageBackground, TextInput, Keyboard, ScrollView} from 'react-native';
 import Header from '../../../components/backHeader';
 import InputField from "../../../components/InputField";
@@ -18,7 +18,20 @@ import SuccessModal from "../../../components/succesModel"
 import SuccessModel from '../../../components/succesModel';
 
 const {width,height}=Dimensions.get('window')
-function Donation({navigation,route,donateNow}){
+function Donation({navigation,route,donateNow,getProfile,userId,profile}){
+
+    useEffect(()=>{
+        if(userId){
+            getProfile(userId)
+        }
+    },[])
+
+    setFieldsMemo=useMemo(()=>{
+        if(profile.email){
+            console.log("profile")
+        }
+    },[profile])
+    
     const [fields,setFields]=useState({
         first_name:"",
         last_name:"",
@@ -79,7 +92,7 @@ function Donation({navigation,route,donateNow}){
             <SuccessModel
             visible={modal}
             closeModle={()=>renderModal('hide')}
-            reDirect={()=>navigation.navigate('home')}
+            reDirect={()=>navigation.jumpTo('home')}
             title="SuccesFully Donated"
             />
             <View style={{flex:1,justifyContent:'space-between'}}>
@@ -228,13 +241,18 @@ const styles=StyleSheet.create({
     },
     amount:{
         fontSize:35,
-        fontWeight:'700',
         marginRight:15,
+        fontFamily:'Poppins-Bold',
         color:'green',
-        width:'70%'
+        width:'70%',
+        includeFontPadding:false
     }
 
 
 })
 
-export default connect(null,actions)(Donation);
+function mapStateToProps({userId,profile}){
+    return {userId,profile}
+}
+
+export default connect(mapStateToProps,actions)(Donation);

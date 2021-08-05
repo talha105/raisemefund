@@ -54,7 +54,7 @@ function SignUp({navigation,registration}){
         }
     }
     return(
-        <View style={{height:height}}>
+        <View style={{flex:1}}>
             <Header
             title="sign-Up"
             back={true}
@@ -182,7 +182,7 @@ function SignUp({navigation,registration}){
                     ):
 
                     (
-                        <View style={{marginTop:20}}>
+                        <View style={{marginVertical:20}}>
                             <FillBtn
                             call={()=>{
                                 setSubmit(true)
@@ -200,7 +200,7 @@ function SignUp({navigation,registration}){
             <View style={{height:height/3.5}}>
                 <ImageBackground
                 resizeMode="stretch"
-                style={{width:width,flex:1,justifyContent:'center',alignItems:'center'}}
+                style={{width:'100%',flex:1,justifyContent:'center',alignItems:'center'}}
                 source={require('../../../assets/footer.png')}
                 >
                     <View style={{justifyContent:'center',alignItems:'center'}}>

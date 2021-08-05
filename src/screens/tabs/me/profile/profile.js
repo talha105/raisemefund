@@ -16,6 +16,7 @@ import ImageModel from "../../../../components/imagePikerModel";
 import ImagePicker from 'react-native-image-crop-picker';
 import SuccessModel from "../../../../components/succesModel"
 import LoaderBtn from "../../../../components/Loader";
+import Loader from "../../../../components/pageLoader";
 const {height,width}=Dimensions.get('window')
 
 function Profile({navigation,getProfile,profile,userId,updateProfile}){
@@ -25,9 +26,11 @@ function Profile({navigation,getProfile,profile,userId,updateProfile}){
     const [sucModel,setSucModel]=useState(false)
     const [img,setImg]=useState(false)
     const [loading,setLoading]=useState(false)
+    const [submit,setSubmit]=useState(false)
+    const [pageLoading,setPageLoading]=useState(true)
 
     useEffect(()=>{
-        getProfile(userId)
+        getProfile(userId).then(()=>setPageLoading(false))
     },[])
 
     const profileMemo=useMemo(()=>{
@@ -93,131 +96,142 @@ function Profile({navigation,getProfile,profile,userId,updateProfile}){
             setLoading(false)
           }
       }
-    return(
-        <View style={{flex:1}}>
-            <Header
-            title="PROFILE"
-            back={true}
-            />
-            <ImageModel
-            visible={model}
-            closeModle={()=>renderImageModel(false)}
-            goToCamera={OpenCamera}
-            goToGallery={OpenLibrary}
-            />
-            <SuccessModel
-            visible={sucModel}
-            title="Successfully Updated"
-            closeModle={()=>renderSucModel(false)}
-            />
-            <ScrollView style={{flex:1,marginBottom:20}}>
-                <ImageBackground 
-                style={{width:'100%',height:height/3.5}}
-                source={require('../../../../../assets/profile.png')}>
-                <View style={{paddingTop:30}}>
-                <Text style={styles.title}>
-                    {fields.name}
-                </Text>
-                <Text style={{...styles.title,fontSize:14,textTransform:'none',paddingTop:0}}>
-                    {fields.email}
-                </Text>
-                </View>
-                <View style={styles.imgCon}>
-                <Image
-                style={styles.img}
-                source={{uri:img?img:fields.image}}
+    if(pageLoading){
+        return <Loader/>
+    }else{
+        return(
+            <View style={{flex:1}}>
+                <Header
+                title="PROFILE"
+                back={true}
                 />
-                <TouchableOpacity 
-                onPress={()=>renderImageModel(true)}
-                style={{justifyContent:'center',alignItems:'center',backgroundColor:'black',flexDirection:'row'}}>
-                    <EditIcon
-                    name="edit"
-                    color="#ffffff"
-                    size={12}
+                <ImageModel
+                visible={model}
+                closeModle={()=>renderImageModel(false)}
+                goToCamera={OpenCamera}
+                goToGallery={OpenLibrary}
+                />
+                <SuccessModel
+                visible={sucModel}
+                title="Successfully Updated"
+                closeModle={()=>renderSucModel(false)}
+                />
+                <ScrollView style={{flex:1,marginBottom:20}}>
+                    <ImageBackground 
+                    style={{width:'100%',height:height/3.5}}
+                    source={require('../../../../../assets/profile.png')}>
+                    <View style={{paddingTop:30}}>
+                    <Text style={styles.title}>
+                        {fields.name}
+                    </Text>
+                    <Text style={{...styles.title,fontSize:14,textTransform:'none',paddingTop:0}}>
+                        {fields.email}
+                    </Text>
+                    </View>
+                    <View style={styles.imgCon}>
+                    <Image
+                    style={styles.img}
+                    source={{uri:img?img:fields.image}}
                     />
-                    <Text style={{color:'white',fontSize:12,marginLeft:5, padding:2}}>Edit</Text>
-                </TouchableOpacity>
-                </View>
-                </ImageBackground>
-                <View style={{width:"90%",marginLeft:'auto',marginRight:'auto',marginTop:70}}>
-                    <View>
-                        <InputField
-                        value={fields.name}
-                        defaultValue={fields.name}
-                        getValue={(v)=>getValue('name',v)}
-                        icon={()=>{
-                            return(
-                                <UserIcon
-                                name="user"
-                                color="gray"
-                                size={20}
-                                />
-                            )
-                        }}
+                    <TouchableOpacity 
+                    onPress={()=>renderImageModel(true)}
+                    style={{justifyContent:'center',alignItems:'center',backgroundColor:'black',flexDirection:'row'}}>
+                        <EditIcon
+                        name="edit"
+                        color="#ffffff"
+                        size={12}
                         />
+                        <Text style={{color:'white',fontSize:12,marginLeft:5, padding:2}}>Edit</Text>
+                    </TouchableOpacity>
                     </View>
-                    <View>
-                        <InputField
-                        defaultValue={fields.organization}
-                        getValue={(v)=>getValue('organization',v)}
-                        icon={()=>{
-                            return(
-                                <OrganIcon
-                                name="organization"
-                                color="gray"
-                                size={20}
-                                />
-                            )
-                        }}
-                        />
+                    </ImageBackground>
+                    <View style={{width:"90%",marginLeft:'auto',marginRight:'auto',marginTop:70}}>
+                        <View>
+                            <InputField
+                            value={fields.name}
+                            defaultValue={fields.name}
+                            getValue={(v)=>getValue('name',v)}
+                            icon={()=>{
+                                return(
+                                    <UserIcon
+                                    name="user"
+                                    color="gray"
+                                    size={20}
+                                    />
+                                )
+                            }}
+                            />
+                            {!fields.name && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Please Fill</Text>:null}
+                        </View>
+                        <View>
+                            <InputField
+                            defaultValue={fields.organization}
+                            getValue={(v)=>getValue('organization',v)}
+                            icon={()=>{
+                                return(
+                                    <OrganIcon
+                                    name="organization"
+                                    color="gray"
+                                    size={20}
+                                    />
+                                )
+                            }}
+                            />
+                            {!fields.organization && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Please Fill</Text>:null}
+                        </View>
+                        {/* <View>
+                            <InputField
+                            defaultValue={fields.phone}
+                            getValue={(v)=>getValue('phone',v)}
+                            getValue={(v)=>getValue('phone',v)}
+                            icon={()=>{
+                                return(
+                                    <PhoneIcon
+                                    name="phone"
+                                    color="gray"
+                                    size={20}
+                                    />
+                                )
+                            }}
+                            />
+                        </View> */}
+                        <View>
+                            <InputField
+                            defaultValue={fields.address}
+                            getValue={(v)=>getValue('address',v)}
+                            getValue={(v)=>getValue('address',v)}
+                            icon={()=>{
+                                return(
+                                    <PhoneIcon
+                                    name="location"
+                                    color="gray"
+                                    size={20}
+                                    />
+                                )
+                            }}
+                            />
+                            {!fields.address && submit?<Text style={{color:'red',textAlign:'right',fontSize:11}}>Please Fill</Text>:null}
+                        </View>
+                        <View style={{marginTop:20}}>
+                        {loading?<LoaderBtn color="#1d879a"/>:(
+                            <FillBtn
+                            call={()=>{
+                                setSubmit(true)
+                                if(fields.name && fields.organization && fields.address){
+                                    setSubmit(false)
+                                    renderLoader(true)
+                                    updateProfile({...fields,user_id:userId},renderSucModel,renderLoader)
+                                }
+                            }}
+                            text="update"
+                            />
+                        )}
+                        </View>
                     </View>
-                    {/* <View>
-                        <InputField
-                        defaultValue={fields.phone}
-                        getValue={(v)=>getValue('phone',v)}
-                        getValue={(v)=>getValue('phone',v)}
-                        icon={()=>{
-                            return(
-                                <PhoneIcon
-                                name="phone"
-                                color="gray"
-                                size={20}
-                                />
-                            )
-                        }}
-                        />
-                    </View> */}
-                    <View>
-                        <InputField
-                        defaultValue={fields.address}
-                        getValue={(v)=>getValue('address',v)}
-                        getValue={(v)=>getValue('address',v)}
-                        icon={()=>{
-                            return(
-                                <PhoneIcon
-                                name="location"
-                                color="gray"
-                                size={20}
-                                />
-                            )
-                        }}
-                        />
-                    </View>
-                    <View style={{marginTop:20}}>
-                    {loading?<LoaderBtn color="#1d879a"/>:(
-                        <FillBtn
-                        call={()=>{
-                            renderLoader(true)
-                            updateProfile({...fields,user_id:userId},renderSucModel,renderLoader)
-                        }}
-                        text="update"
-                        />
-                    )}
-                    </View>
-                </View>
-            </ScrollView>
-        </View>
-    )
+                </ScrollView>
+            </View>
+        )
+    }
 }
 
 const styles=StyleSheet.create({

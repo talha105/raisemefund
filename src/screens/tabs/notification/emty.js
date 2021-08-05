@@ -27,14 +27,14 @@ const styles=StyleSheet.create({
     },
     title:{
         fontWeight:'700',
-        fontSize:28,
+        fontSize:22,
         width:'85%',
         textAlign:'center'
     },
     text:{
         width:'85%',
         color:'gray',
-        fontSize:18,
+        fontSize:14,
         textAlign:'center'
     }
 })
